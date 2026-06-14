@@ -18,6 +18,21 @@ new piece — if you already understand RAG, skip to
 
 ---
 
+## Screenshots
+
+**Docs Assistant (RAG) — Streamlit UI**, with the mode switch (SQL Assistant
+/ Docs Assistant), LLM provider picker, and the chat interface:
+
+![Docs Assistant UI](pics/rag-frontend.png)
+
+**Vector database (Supabase pgvector)** — the `langchain_pg_embedding` /
+`langchain_pg_collection` tables that [`rag/vectorstore.py`](rag/vectorstore.py)
+creates automatically and [`rag/ingest.py`](rag/ingest.py) populates:
+
+![pgvector schema in Supabase](pics/vectordb.png)
+
+---
+
 ## What is RAG, and why do we need it?
 
 Large language models (LLMs) like GPT-4o or Claude are trained on a snapshot
