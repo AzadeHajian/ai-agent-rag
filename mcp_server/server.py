@@ -21,6 +21,7 @@ from tools.supabase_tools import (
     get_table_schema,
     get_sample_rows,
 )
+from tools.rag_tools import retrieve_docs
 
 load_dotenv()
 
@@ -30,12 +31,18 @@ load_dotenv()
 mcp = FastMCP(
     name="sqlspeak-mcp",
     instructions="""
-    You have access to tools for a Supabase PostgreSQL database:
+    You have access to two kinds of tools:
+
+    SQL tools — for a Supabase PostgreSQL database:
     1. Call list_tables() to see what tables exist
     2. Call get_table_schema() to understand the columns
     3. Call get_sample_rows() to understand the data
     4. Call execute_sql() with the correct SQL query
     Always prefer SELECT queries unless the user explicitly asks to modify data.
+
+    Documentation tool — for LangChain documentation questions:
+    - Call retrieve_documentation(query) to search the pgvector knowledge
+      base for relevant chunks before answering.
     """,
 )
 
@@ -100,6 +107,22 @@ def run_sql(query: str) -> str:
         query: The SQL query string to execute.
     """
     return execute_sql.invoke({"query": query})
+
+
+# -----------------------------------------------------------
+# Tool 5: Retrieve LangChain documentation chunks (RAG)
+# -----------------------------------------------------------
+@mcp.tool()
+def retrieve_documentation(query: str, k: int = 4) -> str:
+    """
+    Search the LangChain documentation knowledge base (pgvector) for
+    chunks relevant to the query, using semantic similarity search.
+
+    Args:
+        query: The search query or question.
+        k: Number of chunks to retrieve (default 4).
+    """
+    return retrieve_docs.invoke({"query": query, "k": k})
 
 
 # -----------------------------------------------------------
