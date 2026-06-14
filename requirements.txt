@@ -22,6 +22,14 @@ mcp
 # Database
 supabase
 
+# RAG / Vector store
+langchain-postgres
+psycopg[binary]
+pgvector
+langchain-text-splitters
+beautifulsoup4
+lxml
+
 # Streamlit UI
 streamlit
 
